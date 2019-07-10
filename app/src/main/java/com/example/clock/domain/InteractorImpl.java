@@ -1,18 +1,23 @@
 package com.example.clock.domain;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class InteractorImpl implements Interactor {
     @Override
     public Observable<Boolean> isSubmit(String timeText, Float hourHand, Float minuteHand) {
-        return Observable.just(checkAnswer(timeText, hourHand, minuteHand));
+        return Observable.just(checkAnswer(timeText, hourHand, minuteHand))
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
     public Observable<String> createRandomTask() {
-        return Observable.just(randomTask()).delay(5, TimeUnit.SECONDS);
+        return Observable.just(randomTask())
+                .subscribeOn(Schedulers.io())
+                .delay(5, TimeUnit.SECONDS);
     }
 
     private Boolean checkAnswer(String timeText, Float hourHand, Float minuteHand) {
@@ -21,7 +26,7 @@ public class InteractorImpl implements Interactor {
         int minute = formatMinute(minuteHand);
 
         String hourString = String.valueOf(hour);
-        String minuteString = formatMinuteInt(minute);
+        String minuteString = formatInt(minute);
 
         return isCorrect(hourString, minuteString, timeText);
     }
@@ -42,12 +47,12 @@ public class InteractorImpl implements Interactor {
         return minute;
     }
 
-    private String formatMinuteInt(int minute){
-        String minuteString = String.valueOf(minute);
-        if ((minute / 10) == 0) {
-            minuteString = "0" + minuteString;
+    private String formatInt(int integer){
+        String string = String.valueOf(integer);
+        if ((integer / 10) == 0) {
+            string = "0" + string;
         }
-        return minuteString;
+        return string;
     }
 
     private boolean isCorrect(String hour, String minute, String timeText){
@@ -117,7 +122,26 @@ public class InteractorImpl implements Interactor {
     }
 
     private String randomTask() {
-        //Hard code
-        return "21:30";
+        return (randomHour() + ":" + randomMinute());
+    }
+
+    private String randomHour(){
+        Random random = new Random(System.currentTimeMillis());
+        return formatInt(formatRandom(random.nextInt(24)));
+    }
+
+    private String randomMinute(){
+        Random random = new Random(System.currentTimeMillis());
+        return formatInt(formatRandom(random.nextInt(60)));
+    }
+
+    private int formatRandom(int random){
+        int correctRandom;
+        if (random % 5 == 0) {
+            correctRandom = random;
+        } else {
+            correctRandom = random - (random % 5);
+        }
+        return correctRandom;
     }
 }
