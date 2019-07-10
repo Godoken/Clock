@@ -80,8 +80,11 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener, View.OnClickList
     override fun onClick(v: View) {
         presenter.isSubmit(time_text.text.toString(), rotationHour, rotationMinute).observe(this, Observer <Boolean> {
             if (it){
-                // Success (Подстановка рандомных значений)
-                message_text.text = "Верно!"
+                message_text.text = getString(R.string.success_message)
+                presenter.beginNewTask().observe(this, Observer<String> {
+                    time_text.text = it
+                    message_text.text = getString(R.string.task_message)
+                })
 
             } else {
                 message_text.text = getString(R.string.failure_message)

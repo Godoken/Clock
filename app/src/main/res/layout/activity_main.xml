@@ -13,7 +13,7 @@
             android:layout_height="240dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:contentDescription="Часы"
+            android:contentDescription="@string/clock_description"
             android:padding="20dp"
             android:src="@drawable/clock_picture"
             android:layout_marginEnd="8dp"
@@ -48,7 +48,7 @@
             android:layout_marginEnd="24dp" android:layout_height="100dp" android:background="#740C0101"
             android:transformPivotX="3dp" android:transformPivotY="100dp"/>
     <TextView
-            android:text="Переведи стрелки часов на:"
+            android:text="@string/task_message"
             android:layout_width="240dp"
             android:layout_height="59dp"
             android:id="@+id/message_text"
@@ -57,7 +57,7 @@
             android:textAlignment="center" android:textSize="18sp" app:layout_constraintHorizontal_bias="0.496"
             android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/clock"/>
     <TextView
-            android:text="12:00"
+            android:text="@string/_12_00"
             android:layout_width="126dp"
             android:layout_height="58dp"
             android:id="@+id/time_text"
@@ -66,7 +66,7 @@
             android:textAlignment="center" android:textSize="24sp" android:layout_marginTop="8dp"
             app:layout_constraintHorizontal_bias="0.498"/>
     <Button
-            android:text="Submit"
+            android:text="@string/submit_text"
             android:layout_width="158dp"
             android:layout_height="141dp"
             android:id="@+id/submit_button" android:layout_marginTop="8dp"

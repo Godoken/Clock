@@ -9,11 +9,11 @@ import io.reactivex.disposables.Disposable;
 
 public class Presenter {
 
-    protected InterfaceView view;
-
+    private InterfaceView view;
     private Interactor interactor;
 
     private MutableLiveData<Boolean> isSubmit = new MutableLiveData<>();
+    private MutableLiveData<String> randomTask = new MutableLiveData<>();
 
     private String timeText;
     private Float hourHand;
@@ -31,7 +31,8 @@ public class Presenter {
         this.view = null;
     }
 
-    private void isSubmit() {
+    private MutableLiveData<Boolean> isSubmit() {
+        isSubmit = new MutableLiveData<>();
         Observable<Boolean> observable = interactor.isSubmit(timeText, hourHand, minuteHand);
         Observer<Boolean> observer = new Observer<Boolean>() {
             @Override
@@ -57,13 +58,47 @@ public class Presenter {
         observable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
+        return isSubmit;
     }
 
     public MutableLiveData<Boolean> isSubmit(String timeText, Float hourHand, Float minuteHand){
         this.timeText = timeText;
         this.hourHand = hourHand;
         this.minuteHand = minuteHand;
-        isSubmit();
-        return isSubmit;
+        return isSubmit();
+    }
+
+    private MutableLiveData<String> randomTask() {
+        randomTask = new MutableLiveData<>();
+        Observable<String> observable = interactor.createRandomTask();
+        Observer<String> observer = new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                view.showProgress();
+            }
+
+            @Override
+            public void onNext(String task) {
+                randomTask.postValue(task);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                view.hideProgress();
+            }
+
+            @Override
+            public void onComplete() {
+                view.hideProgress();
+            }
+        };
+        observable
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+        return randomTask;
+    }
+
+    public MutableLiveData<String> beginNewTask() {
+        return randomTask();
     }
 }
