@@ -69,9 +69,7 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener, View.OnClickList
         })
 
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> { }
             MotionEvent.ACTION_MOVE -> { liveMove.value = true}
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> { }
         }
         liveMove.removeObservers(this)
         return rotation
@@ -94,9 +92,21 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener, View.OnClickList
 
     override fun showProgress() {
         progressBar.visibility = View.VISIBLE
+
+        clock.visibility = View.GONE
+        hand_hour.visibility = View.GONE
+        hand_minute.visibility = View.GONE
+        time_text.visibility = View.GONE
+        submit_button.visibility = View.GONE
     }
 
     override fun hideProgress() {
         progressBar.visibility = View.GONE
+
+        clock.visibility = View.VISIBLE
+        hand_hour.visibility = View.VISIBLE
+        hand_minute.visibility = View.VISIBLE
+        time_text.visibility = View.VISIBLE
+        submit_button.visibility = View.VISIBLE
     }
 }
