@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Clock</string>
+    <string name="failure_message">Неверно, попробуйте ещё раз...</string>
 </resources>
