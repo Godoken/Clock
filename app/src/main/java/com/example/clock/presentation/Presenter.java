@@ -101,4 +101,8 @@ public class Presenter {
     public MutableLiveData<String> beginNewTask() {
         return randomTask();
     }
+
+    public int chooseKindRotation(float x, float y, float previousX, float previousY) {
+        return interactor.chooseKindRotation(x, y, previousX, previousY);
+    }
 }

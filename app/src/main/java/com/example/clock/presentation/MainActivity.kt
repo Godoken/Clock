@@ -1,7 +1,6 @@
 package com.example.clock.presentation
 
 import android.animation.Animator
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.MotionEvent
@@ -22,6 +21,11 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener, View.OnClickList
 
     var rotationHour: Float = 0.0f
     var rotationMinute: Float = 0.0f
+
+    private var previousX: Float = 0.0f
+    private var previousY: Float = 0.0f
+
+    var rotation: Int = 0
 
     private lateinit var presenter: Presenter
 
@@ -57,22 +61,34 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener, View.OnClickList
     }
 
     private fun animate(v: View, event: MotionEvent) : Float {
-        var rotation = 0.0f
-        val set = AnimatorSet()
+        var localRotation = 0.0f
 
         liveMove.observe(this, Observer<Boolean> {
-            rotation = (v.rotation + 30.0f).minus((v.rotation + 30.0f).rem(30))
-            animator = ObjectAnimator.ofFloat(v, View.ROTATION, v.rotation, rotation)
-            animator.duration = 100
-            set.play(animator)
-            set.start()
+            localRotation = (v.rotation + rotation).minus((v.rotation + rotation).rem(30))
+            animator = ObjectAnimator.ofFloat(v, View.ROTATION, v.rotation, localRotation)
+                .setDuration(200)
+            animator.start()
         })
 
         when (event.action) {
-            MotionEvent.ACTION_MOVE -> { liveMove.value = true}
+            MotionEvent.ACTION_DOWN -> {
+                previousX = event.x
+                previousY = event.y
+            }
+            MotionEvent.ACTION_MOVE -> {
+                if (rotation == 0) {
+                    rotation = presenter.chooseKindRotation(event.x, event.y, previousX, previousY)
+                    previousX = event.x
+                    previousY = event.y
+                }
+                liveMove.value = true
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                rotation = 0
+            }
         }
         liveMove.removeObservers(this)
-        return rotation
+        return localRotation
     }
 
     override fun onClick(v: View) {

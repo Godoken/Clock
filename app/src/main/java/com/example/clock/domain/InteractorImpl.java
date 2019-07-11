@@ -20,6 +20,39 @@ public class InteractorImpl implements Interactor {
                 .delay(5, TimeUnit.SECONDS);
     }
 
+    @Override
+    public int chooseKindRotation(float x, float y, float previousX, float previousY) {
+        int rotation;
+        if ((previousX == x) & (previousY == y)) {
+            rotation = 0;
+        } else {
+            if (chooseVector(x, y, previousX, previousY)) {
+                rotation = 30;
+            } else {
+                rotation = -30;
+            }
+        }
+        return rotation;
+    }
+
+    private boolean chooseVector(float x, float y, float previousX, float previousY) {
+        boolean b;
+        if (x >= previousX) {
+            if (y >= previousY) {
+                b = (y >= 0);
+            } else {
+                b = (y <= 0);
+            }
+        } else {
+            if (y >= previousY) {
+                b = (y <= 0);
+            } else {
+                b = (y >= 0);
+            }
+        }
+        return b;
+    }
+
     private Boolean checkAnswer(String timeText, Float hourHand, Float minuteHand) {
 
         int hour = formatHour(hourHand);
