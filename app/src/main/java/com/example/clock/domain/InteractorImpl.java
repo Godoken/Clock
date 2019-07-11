@@ -6,6 +6,8 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Math.abs;
+
 public class InteractorImpl implements Interactor {
     @Override
     public Observable<Boolean> isSubmit(String timeText, Float hourHand, Float minuteHand) {
@@ -66,16 +68,22 @@ public class InteractorImpl implements Interactor {
 
     private int formatHour(Float hourFloat){
         int hour = hourFloat.intValue()/30;
-        if (hour >= 12) {
+        if (abs(hour) >= 12) {
             hour = hour % 12;
+        }
+        if (hour < 0) {
+            hour = 12 + hour;
         }
         return hour;
     }
 
     private int formatMinute(Float minuteFloat){
         int minute = minuteFloat.intValue()/30*5;
-        if (minute >= 60) {
+        if (abs(minute) >= 60) {
             minute = minute % 60;
+        }
+        if (minute < 0) {
+            minute = 60 + minute;
         }
         return minute;
     }

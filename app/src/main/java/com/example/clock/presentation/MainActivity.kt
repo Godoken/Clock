@@ -1,11 +1,10 @@
 package com.example.clock.presentation
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.clock.R
@@ -16,8 +15,6 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener, View.OnClickList
     InterfaceView {
 
     private var liveMove: MutableLiveData<Boolean> = MutableLiveData()
-
-    lateinit var animator: Animator
 
     var rotationHour: Float = 0.0f
     var rotationMinute: Float = 0.0f
@@ -65,9 +62,11 @@ class MainActivity : AppCompatActivity(), View.OnTouchListener, View.OnClickList
 
         liveMove.observe(this, Observer<Boolean> {
             localRotation = (v.rotation + rotation).minus((v.rotation + rotation).rem(30))
-            animator = ObjectAnimator.ofFloat(v, View.ROTATION, v.rotation, localRotation)
-                .setDuration(200)
-            animator.start()
+
+            ViewCompat.animate(v)
+                .setDuration(110)
+                .rotation(localRotation)
+                .start()
         })
 
         when (event.action) {
